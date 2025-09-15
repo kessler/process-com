@@ -1,0 +1,27 @@
+{
+  "name": "@kessler/process-com",
+  "version": "1.0.0",
+  "description": "interprocess communications in node.js",
+  "homepage": "https://github.com/deepcortexlabs/process-com#readme",
+  "bugs": {
+    "url": "https://github.com/deepcortexlabs/process-com/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepcortexlabs/process-com.git"
+  },
+  "license": "UNLICENSED",
+  "author": "Yaniv Kessler",
+  "type": "module",
+  "main": "index.mjs",
+  "scripts": {
+    "test": "npx ava"
+  },
+  "dependencies": {
+    "@kessler/json": "^1.0.0"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.2.4",
+    "ava": "^6.4.1"
+  }
+}
