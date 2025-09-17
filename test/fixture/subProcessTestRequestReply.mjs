@@ -1,15 +1,10 @@
-import ProcessComm from '../../lib/ProcessComm.mjs'
+import ProcessCom from '../../lib/ProcessCom.mjs'
 
-const main = new ProcessComm(process)
+const main = new ProcessCom(process)
 
 // rpc
-main.onRequest('myApiCall', (data, reply) => {
-  reply(data)
+main.onRequest('myApiCall', async (data, resolve, reject) => {
+  resolve(data)
 })
-
-// event
-// main.on('myMainEvent', data => {
-//   main.sendMessage('myChildEvent', { some: 'child data', args: process.argv.slice(2) })
-// })
 
 main.sendReady()

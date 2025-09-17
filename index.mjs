@@ -1,4 +1,4 @@
-import ProcessComm from './lib/ProcessComm.mjs'
+import ProcessCom from './lib/ProcessCom.mjs'
 import ProcessController from './lib/ProcessController.mjs'
 
-export { ProcessComm, ProcessController }
+export { ProcessCom, ProcessController }

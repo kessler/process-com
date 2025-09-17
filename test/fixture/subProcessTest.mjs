@@ -1,6 +1,6 @@
-import ProcessComm from '../../lib/ProcessComm.mjs'
+import ProcessCom from '../../lib/ProcessCom.mjs'
 
-const main = new ProcessComm(process)
+const main = new ProcessCom(process)
 
 main.on('myMainEvent', data => {
   main.sendMessage('myChildEvent', { some: 'child data', args: process.argv.slice(2) })
