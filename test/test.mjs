@@ -21,6 +21,17 @@ test('ProcessController starts and stops a child process', async t => {
   })
 })
 
+test('Request/Reply between parent and child process', async t => {
+  t.timeout(5000)
+  
+  const controller = await ProcessController.start(join(fixtureDir, 'subProcessTestRequestReply.mjs'), [1, 2, 3])
+  const data = { foo: `${Date.now()}::${Math.random()}` }
+  const reply = await controller.comm.sendRequest('myApiCall', data)
+  t.deepEqual(reply, data)
+  controller.stopChild()
+})
+
+
 test.skip('worker process throws error on initialization', async t => {
   // @TODO: figure out how to catch this error properly
   t.timeout(5000)
