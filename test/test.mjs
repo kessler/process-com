@@ -1,6 +1,8 @@
 import ProcessController from '../lib/ProcessController.mjs'
 import { join } from 'path'
 import test from 'ava'
+import { spawn } from 'node:child_process'
+import { readFile, writeFile } from 'node:fs/promises'
 
 const __dirname = import.meta.dirname
 const fixtureDir = join(__dirname, 'fixture')
@@ -69,7 +71,24 @@ test('multiple Request/Reply between parent and child process', async t => {
   controller.stopChild()
 })
 
-//test('running node --watch ')
+test('running node --watch sends watch messages to child process', async t => {
+  t.timeout(15000)
+  const mainProcessPath = join(fixtureDir, 'mainProcess.mjs')
+  const source = await readFile(mainProcessPath, 'utf-8')
+  
+  const nodeProcess = spawn('node', ['--watch', mainProcessPath], { stdio: 'inherit'})
+  
+  await sleep(1000)
+
+  const newSource = replaceBetweenMarkers(source, 'marker', `console.log('file changed at ${Date.now()}')`)
+
+  await writeFile(mainProcessPath, newSource, 'utf-8')
+  
+  await sleep(1000)
+
+  nodeProcess.kill()
+  t.pass()
+})
 
 test.skip('worker process throws error on initialization', async t => {
   // @TODO: figure out how to catch this error properly
@@ -82,3 +101,23 @@ test.skip('worker process throws error on initialization', async t => {
     console.error(error)
   }
 })
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+function replaceBetweenMarkers(source, marker, replacement) {
+  const startMarker = `//${marker}--`
+  const endMarker = `//--${marker}`
+  
+  const startIndex = source.indexOf(startMarker)
+  const endIndex = source.indexOf(endMarker)
+  
+  if (startIndex === -1 || endIndex === -1 || endIndex <= startIndex) {
+    throw new Error('Markers not found or invalid in source')
+  }
+  
+  return `${source.slice(0, startIndex + startMarker.length)}
+  ${replacement}
+  ${source.slice(endIndex)}`
+}
