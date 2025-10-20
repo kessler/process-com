@@ -69,6 +69,8 @@ test('multiple Request/Reply between parent and child process', async t => {
   controller.stopChild()
 })
 
+//test('running node --watch ')
+
 test.skip('worker process throws error on initialization', async t => {
   // @TODO: figure out how to catch this error properly
   t.timeout(5000)
